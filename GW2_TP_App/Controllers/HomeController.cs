@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GW2_TP_App.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,12 +7,18 @@ using System.Web.Mvc;
 
 namespace GW2_TP_App.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {
-            return View();
+            //dataService.SaveAll();
+            var model = new BoughtItemsVM(); 
+            model.boughtItems =  dataService.GetAll(); 
+            return View(model);
         }
+
+       
+
 
         public ActionResult About()
         {

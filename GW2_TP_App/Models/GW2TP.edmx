@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GW2TPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BoughtItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Price_buy" Type="float" Nullable="false" />
+          <Property Name="Price_sell_plan" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SoldItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ParentID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Price_Sell" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SoldItems_BoughtItems">
+          <End Role="BoughtItems" Type="Self.BoughtItems" Multiplicity="1" />
+          <End Role="SoldItems" Type="Self.SoldItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BoughtItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SoldItems">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GW2TPModelStoreContainer">
+          <EntitySet Name="BoughtItems" EntityType="Self.BoughtItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SoldItems" EntityType="Self.SoldItems" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SoldItems_BoughtItems" Association="Self.FK_SoldItems_BoughtItems">
+            <End Role="BoughtItems" EntitySet="BoughtItems" />
+            <End Role="SoldItems" EntitySet="SoldItems" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GW2TPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="GW2TPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BoughtItems" EntityType="GW2TPModel.BoughtItems" />
+          <EntitySet Name="SoldItems" EntityType="GW2TPModel.SoldItems" />
+          <AssociationSet Name="FK_SoldItems_BoughtItems" Association="GW2TPModel.FK_SoldItems_BoughtItems">
+            <End Role="BoughtItems" EntitySet="BoughtItems" />
+            <End Role="SoldItems" EntitySet="SoldItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BoughtItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price_buy" Type="Double" Nullable="false" />
+          <Property Name="Price_sell_plan" Type="Double" Nullable="false" />
+          <NavigationProperty Name="SoldItems" Relationship="GW2TPModel.FK_SoldItems_BoughtItems" FromRole="BoughtItems" ToRole="SoldItems" />
+        </EntityType>
+        <EntityType Name="SoldItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="ParentID" Type="Guid" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price_Sell" Type="Double" Nullable="false" />
+          <NavigationProperty Name="BoughtItems" Relationship="GW2TPModel.FK_SoldItems_BoughtItems" FromRole="SoldItems" ToRole="BoughtItems" />
+        </EntityType>
+        <Association Name="FK_SoldItems_BoughtItems">
+          <End Type="GW2TPModel.BoughtItems" Role="BoughtItems" Multiplicity="1" />
+          <End Type="GW2TPModel.SoldItems" Role="SoldItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BoughtItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SoldItems">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GW2TPModelStoreContainer" CdmEntityContainer="GW2TPEntities">
+          <EntitySetMapping Name="BoughtItems">
+            <EntityTypeMapping TypeName="GW2TPModel.BoughtItems">
+              <MappingFragment StoreEntitySet="BoughtItems">
+                <ScalarProperty Name="Price_sell_plan" ColumnName="Price_sell_plan" />
+                <ScalarProperty Name="Price_buy" ColumnName="Price_buy" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SoldItems">
+            <EntityTypeMapping TypeName="GW2TPModel.SoldItems">
+              <MappingFragment StoreEntitySet="SoldItems">
+                <ScalarProperty Name="Price_Sell" ColumnName="Price_Sell" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
